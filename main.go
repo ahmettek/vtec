@@ -10,10 +10,9 @@ type user struct {
     Name string `json:"name"`
 }
 func main() {
-
     gopi :=api.New();
     gopi.GET("/api/keys",GetData)
-    api.Serve(gopi);
+    gopi.Serve("8081")
 }
 func GetData(w http.ResponseWriter, r *http.Request) {
     w.Header().Set("Content-Type", "application/json")

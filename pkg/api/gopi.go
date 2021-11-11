@@ -1,7 +1,6 @@
 package api
 
 import (
-	"encoding/json"
 	"net/http"
 )
 
@@ -35,40 +34,23 @@ func (e *Gopi) Add(method string,path string, handler func(w http.ResponseWriter
 }
 
 type Route struct {
-Method string `json:"method"`
-Path   string `json:"path"`
-Handler   func(w http.ResponseWriter, r *http.Request) `json:"name"`
+	Method string `json:"method"`
+	Path   string `json:"path"`
+	Handler   func(w http.ResponseWriter, r *http.Request) `json:"name"`
 }
 
-type basicApiHandler struct {}
+type basicApiHandler struct {
+	api *Gopi
+}
 
 func (h *basicApiHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+
 	w.Header().Set("content-type", "application/json")
-	switch {
-	case r.Method == http.MethodGet:
-		h.Get(w, r)
-		return
-	case r.Method == http.MethodPut:
-		h.Set(w, r)
-		return
-	default:
-		notFound(w, r)
-		return
+
+	for i := range h.api.routes {
+		if h.api.routes[i].Method == r.Method && h.api.routes[i].Path == r.URL.Path {
+			h.api.routes[i].Handler(w,r)
+		}
 	}
-}
 
-func (h *basicApiHandler) Get(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode(true)
-}
-
-func (h *basicApiHandler) Set(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode(true)
-}
-func notFound(w http.ResponseWriter, r *http.Request) {
-	w.WriteHeader(http.StatusNotFound)
-	w.Write([]byte("not found"))
 }
