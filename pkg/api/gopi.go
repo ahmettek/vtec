@@ -20,8 +20,9 @@ func New() *Gopi {
 	}
 }
 
-func Serve(g*Gopi) {
+func (g*Gopi) Serve(port string) {
 	g.mux.Handle("/api/keys",&basicApiHandler{})
+	http.ListenAndServe(":"+port, g.mux)
 }
 
 func (e *Gopi) GET(path string,handler func(w http.ResponseWriter, r *http.Request)) {
