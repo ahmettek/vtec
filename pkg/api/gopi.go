@@ -1,4 +1,4 @@
-package api
+package gopi
 
 import (
 	"net/http"
