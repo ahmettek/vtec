@@ -11,9 +11,10 @@ type user struct {
 }
 func main() {
     gopi :=api.New();
-    gopi.GET("/api/keys",GetData)
+    gopi.GET("/",GetData)
     gopi.Serve("8081")
 }
+
 func GetData(w http.ResponseWriter, r *http.Request) {
     w.Header().Set("Content-Type", "application/json")
     w.WriteHeader(http.StatusCreated)

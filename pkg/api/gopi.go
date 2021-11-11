@@ -9,11 +9,19 @@ type Gopi struct {
 	mux *http.ServeMux
 }
 
+type Route struct {
+	Method string `json:"method"`
+	Path   string `json:"path"`
+	Handler   func(w http.ResponseWriter, r *http.Request) `json:"name"`
+}
+
+type basicApiHandler struct {
+	api *Gopi
+}
+
 // New returns an initialized Gopi structure, ready to use.
 func New() *Gopi {
-
 	mux := http.NewServeMux()
-
 	return &Gopi{
 		mux: mux,
 	}
@@ -25,22 +33,16 @@ func (g*Gopi) Serve(port string) {
 }
 
 func (e *Gopi) GET(path string,handler func(w http.ResponseWriter, r *http.Request)) {
-	 e.Add(http.MethodGet,path,handler)
+	 e.add(http.MethodGet,path,handler)
 }
 
-func (e *Gopi) Add(method string,path string, handler func(w http.ResponseWriter, r *http.Request)) {
+func (e *Gopi) POST(path string,handler func(w http.ResponseWriter, r *http.Request)) {
+	e.add(http.MethodPost,path,handler)
+}
+
+func (e *Gopi) add(method string,path string, handler func(w http.ResponseWriter, r *http.Request)) {
 	routes := append(e.routes, Route{Method: method, Path: path,Handler: handler})
 	e.routes=routes;
-}
-
-type Route struct {
-	Method string `json:"method"`
-	Path   string `json:"path"`
-	Handler   func(w http.ResponseWriter, r *http.Request) `json:"name"`
-}
-
-type basicApiHandler struct {
-	api *Gopi
 }
 
 func (h *basicApiHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -52,5 +54,4 @@ func (h *basicApiHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			h.api.routes[i].Handler(w,r)
 		}
 	}
-
 }
