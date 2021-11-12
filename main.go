@@ -13,15 +13,11 @@ func main() {
     g :=gopi.New()
 
     //key-value store instance
-    s :=vtec.New(vtec.Options{
+    vtec.New(vtec.Options{
         Storage: &storage.FileStore{
-            Dir: "humans.json.gz",
+            Dir: "humans.json",
         },
     })
-
-    s.Set("ahmet","tek")
-    response := s.Get("ahmet")
-    println(response)
 
     // routes
     g.GET("/api/keys/:id",GetData)

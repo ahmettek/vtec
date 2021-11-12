@@ -9,7 +9,7 @@ import (
 var GlobalStore = make(map[string]string)
 
 type Store interface {
-	Init() error
+	Load() error
 	Write(data map[string]string) error
 }
 
@@ -23,7 +23,7 @@ type Options struct {
 
 func New(options Options) *Vtec {
 
-	options.Storage.Init()
+	options.Storage.Load()
 
 	ticker := time.NewTicker(1000 * time.Millisecond)
 	go func() {
