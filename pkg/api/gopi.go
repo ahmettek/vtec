@@ -10,9 +10,9 @@ type Gopi struct {
 }
 
 type Route struct {
-	Method string `json:"method"`
-	Path   string `json:"path"`
-	Handler   func(w http.ResponseWriter, r *http.Request) `json:"name"`
+	Method string
+	Path   string 
+	Handler   func(w http.ResponseWriter, r *http.Request)
 }
 
 type basicApiHandler struct {
