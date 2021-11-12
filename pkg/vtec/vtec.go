@@ -2,22 +2,29 @@ package vtec
 
 import (
 	"fmt"
+	"sync"
 	"time"
 )
 
 var GlobalStore = make(map[string]string)
 
+type Store interface {
+	Init() error
+	Write(data map[string]string) error
+}
+
+type Vtec struct{
+	mu sync.Mutex
+}
+
 type Options struct {
 	Storage Store
 }
 
-type Store interface {
-	Write(data map[string]string) error
-}
-
-type Vtec struct{}
-
 func New(options Options) *Vtec {
+
+	options.Storage.Init()
+
 	ticker := time.NewTicker(1000 * time.Millisecond)
 	go func() {
 		for range ticker.C {
@@ -40,8 +47,10 @@ func (s *Vtec) Get(key string) string {
 }
 
 func (s *Vtec) Set(key string, value string) bool {
-
+	s.mu.Lock()
 	GlobalStore[key] = value
+	s.mu.Unlock()
+
 	fmt.Println(key, "set")
 	return true
 }

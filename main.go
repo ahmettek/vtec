@@ -14,7 +14,7 @@ func main() {
     //key-value store instance
     s :=vtec.New(vtec.Options{
         Storage: &vtec.FileStore{
-            Path: "/local/temp",
+            Path: "/temp",
         },
     })
 
