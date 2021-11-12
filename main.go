@@ -15,7 +15,7 @@ func main() {
     //key-value store instance
     v:=vtec.New(vtec.Options{
         Storage: &storage.FileStore{
-            FileName: "humans1.json",
+            FileName: "humans.json",
         },
     })
     v.Set("atek","baba")

@@ -11,12 +11,12 @@ import (
 )
 
 const (
- dirMode = 0755
- fileMode = 0644
+	dirMode = 0755
+	fileMode = 0644
 )
 
 type FileStore struct {
-	FileName string
+	Dir string
 	mu sync.RWMutex
 }
 
@@ -27,12 +27,12 @@ func (fs*FileStore) Write(data map[string]string) error {
 	for key := range data {
 		toSave[key] = data[key]
 	}
-	f, err := os.Create(fs.FileName)
+	f, err := os.Create(fs.Dir)
 	if err != nil {
 		return err
 	}
 	defer f.Close()
-	if strings.HasSuffix(fs.FileName, "") {
+	if strings.HasSuffix(fs.Dir, "") {
 		w := gzip.NewWriter(f)
 		defer w.Close()
 		enc := json.NewEncoder(w)
@@ -49,14 +49,14 @@ func (fs*FileStore) Write(data map[string]string) error {
 func (fs*FileStore) Load() error {
 
 	var err error
-	f, err := os.Open(fs.FileName)
+	f, err := os.Open(fs.Dir)
 	defer f.Close()
 	if err != nil {
 		return err
 	}
 
 	var w io.Reader
-	if strings.HasSuffix(fs.FileName, ".gz") {
+	if strings.HasSuffix(fs.Dir, ".gz") {
 		w, err = gzip.NewReader(f)
 		if err != nil {
 			return err
