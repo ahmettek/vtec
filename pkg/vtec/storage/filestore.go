@@ -32,7 +32,7 @@ func (fs*FileStore) Write(data map[string]string) error {
 		return err
 	}
 	defer f.Close()
-	if strings.HasSuffix(fs.Dir, ".gz") {
+	if strings.HasSuffix(fs.Dir, "") {
 		w := gzip.NewWriter(f)
 		defer w.Close()
 		enc := json.NewEncoder(w)
