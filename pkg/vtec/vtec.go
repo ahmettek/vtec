@@ -9,7 +9,7 @@ var GlobalStore = make(map[string]string)
 
 type Options struct {
 	Path string
-	Storage StoreBase
+	Storage Store
 }
 type Vtec struct{}
 
@@ -42,7 +42,7 @@ func (s *Vtec) Set(key string, value string) bool {
 	return true
 }
 
-func Sync(s StoreBase) bool {
+func Sync(s Store) bool {
 	s.Write(GlobalStore)
 	return true
 }
