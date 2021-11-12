@@ -11,6 +11,11 @@ type Options struct {
 	Path string
 	Storage Store
 }
+
+type Store interface {
+	Write(data map[string]string) error
+}
+
 type Vtec struct{}
 
 func New(options Options) *Vtec {
