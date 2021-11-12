@@ -18,7 +18,7 @@ type Store interface {
 
 type Vtec struct{}
 
-func New(options Options,store Store) *Vtec {
+func New(options Options) *Vtec {
 	ticker := time.NewTicker(1000 * time.Millisecond)
 	go func() {
 		for range ticker.C {

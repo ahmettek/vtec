@@ -13,6 +13,7 @@ func main() {
 
     s :=vtec.New(vtec.Options{
         Path: "/local/temp",
+        Storage: &vtec.FileStore{},
     })
 
     s.Set("ahmet","tek")
