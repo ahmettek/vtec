@@ -2,6 +2,7 @@ package vtec
 
 import (
 	"fmt"
+	"github.com/ahmettek/vtec/pkg/vtec"
 	"time"
 )
 
@@ -9,7 +10,7 @@ var GlobalStore = make(map[string]string)
 
 type Options struct {
 	Path string
-	Storage Store
+	Storage vtec.StoreBase
 }
 type Vtec struct{}
 
@@ -42,9 +43,7 @@ func (s *Vtec) Set(key string, value string) bool {
 	return true
 }
 
-func Sync(s Store) bool {
-	for k, v := range GlobalStore {
-		fmt.Printf("key[%s] value[%s]\n", k, v)
-	}
+func Sync(s vtec.StoreBase) bool {
+	s.Write(GlobalStore)
 	return true
 }

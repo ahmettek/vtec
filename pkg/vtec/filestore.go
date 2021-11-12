@@ -15,7 +15,3 @@ func Write(data map[string]string) error {
 	println("girdi")
 	return nil
 }
-
-func  READ() {
-	Store.Write(nil,stores)
-}
