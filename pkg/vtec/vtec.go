@@ -9,6 +9,7 @@ var GlobalStore = make(map[string]string)
 
 type Options struct {
 	Path string
+	Storage Store
 }
 type Vtec struct{}
 
@@ -16,7 +17,7 @@ func New(options Options) *Vtec {
 	ticker := time.NewTicker(1000 * time.Millisecond)
 	go func() {
 		for range ticker.C {
-			fmt.Println("Save" + options.Path)
+			Sync(options.Storage)
 		}
 	}()
 	return &Vtec{
@@ -38,5 +39,12 @@ func (s *Vtec) Set(key string, value string) bool {
 
 	GlobalStore[key] = value
 	fmt.Println(key, "set")
+	return true
+}
+
+func Sync(s Store) bool {
+	for k, v := range GlobalStore {
+		fmt.Printf("key[%s] value[%s]\n", k, v)
+	}
 	return true
 }
