@@ -27,7 +27,8 @@ func (fs*FileStore) Write(data map[string]string) error {
 	for key := range data {
 		toSave[key] = data[key]
 	}
-	f, err := os.Create(fs.FileName)
+
+	f, err := os.Create("temp/"+fs.FileName)
 	if err != nil {
 		return err
 	}
