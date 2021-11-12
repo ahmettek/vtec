@@ -4,6 +4,7 @@ import (
     "encoding/json"
     "github.com/ahmettek/vtec/pkg/api"
     "github.com/ahmettek/vtec/pkg/vtec"
+    "github.com/ahmettek/vtec/pkg/vtec/storage"
     "net/http"
 )
 
@@ -13,8 +14,8 @@ func main() {
 
     //key-value store instance
     s :=vtec.New(vtec.Options{
-        Storage: &vtec.FileStore{
-            Path: "/temp",
+        Storage: &storage.FileStore{
+            Dir: "humans.json.gz",
         },
     })
 

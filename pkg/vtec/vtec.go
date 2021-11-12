@@ -49,7 +49,7 @@ func (s *Vtec) Get(key string) string {
 func (s *Vtec) Set(key string, value string) bool {
 	s.mu.Lock()
 	GlobalStore[key] = value
-	s.mu.Unlock()
+	defer s.mu.Unlock()
 
 	fmt.Println(key, "set")
 	return true

@@ -1,8 +1,11 @@
 package storage
 
 import (
-	"fmt"
+	"compress/gzip"
+	"encoding/json"
 	"os"
+	"strings"
+	"sync"
 )
 
 const (
@@ -12,17 +15,39 @@ const (
 
 type FileStore struct {
 	Dir string
+	mu sync.RWMutex
 }
 
-func (f*FileStore) Write(data map[string]string) error {
-	for k, v := range data {
-		fmt.Printf("key[%s] value[%s]\n", k, v)
+func (fs*FileStore) Write(data map[string]string) error {
+
+
+	fs.mu.RLock()
+	defer fs.mu.RUnlock()
+	toSave := make(map[string]string)
+	for key := range data {
+		toSave[key] = string(data[key])
 	}
+	f, err := os.Create(fs.Dir)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+	if strings.HasSuffix(fs.Dir, ".gz") {
+		w := gzip.NewWriter(f)
+		defer w.Close()
+		enc := json.NewEncoder(w)
+		enc.SetIndent("", " ")
+		return enc.Encode(toSave)
+	}
+	enc := json.NewEncoder(f)
+	enc.SetIndent("", " ")
+	return enc.Encode(toSave)
+
 	return nil
 }
 
 func (f*FileStore) Init() error {
-	dir:=f.Dir
+	/*dir:=f.Dir
 	var err error
 	_, err = os.Stat(f.Dir)
 	if err != nil {
@@ -37,6 +62,6 @@ func (f*FileStore) Init() error {
 		} else {
 			return err
 		}
-	}
+	}*/
 	return nil
 }
