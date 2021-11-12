@@ -1,9 +1,9 @@
-package vtec
+package storage
 
 import "fmt"
 
 type FileStore struct {
-
+	Path string
 }
 
 func (f*FileStore) Write(data map[string]string) error {

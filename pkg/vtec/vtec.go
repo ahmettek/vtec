@@ -8,7 +8,6 @@ import (
 var GlobalStore = make(map[string]string)
 
 type Options struct {
-	Path string
 	Storage Store
 }
 

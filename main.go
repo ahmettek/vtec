@@ -11,9 +11,11 @@ func main() {
     // gopi instance
     g :=gopi.New()
 
+    //key-value store instance
     s :=vtec.New(vtec.Options{
-        Path: "/local/temp",
-        Storage: &vtec.FileStore{},
+        Storage: &vtec.FileStore{
+            Path: "/local/temp",
+        },
     })
 
     s.Set("ahmet","tek")
