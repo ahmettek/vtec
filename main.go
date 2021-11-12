@@ -3,12 +3,18 @@ package main
 import (
     "encoding/json"
     "github.com/ahmettek/vtec/pkg/api"
+    "github.com/ahmettek/vtec/pkg/storage"
     "net/http"
 )
 
 func main() {
     // gopi instance
     g :=gopi.New()
+    s :=storage.New()
+    s.Set("ahmet","tek")
+    response :=s.Get("ahmet")
+    println(response)
+
 
     // routes
     g.GET("/api/keys/:id",GetData)

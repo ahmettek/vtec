@@ -2,13 +2,23 @@ package storage
 
 import (
 	"fmt"
+	"time"
 )
 
 var GlobalStore = make(map[string]string)
 
+type Options struct {
+	Path string
+}
 type Storage struct {}
 
-func New() *Storage {
+func New(options Options) *Storage {
+	ticker := time.NewTicker(1000 * time.Millisecond)
+	go func() {
+		for range ticker.C {
+			fmt.Println("Tick")
+		}
+	}()
 	return &Storage{
 	}
 }
