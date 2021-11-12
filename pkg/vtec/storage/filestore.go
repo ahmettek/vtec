@@ -16,7 +16,7 @@ const (
 )
 
 type FileStore struct {
-	Dir string
+	FileName string
 	mu sync.RWMutex
 }
 
@@ -27,12 +27,12 @@ func (fs*FileStore) Write(data map[string]string) error {
 	for key := range data {
 		toSave[key] = data[key]
 	}
-	f, err := os.Create(fs.Dir)
+	f, err := os.Create(fs.FileName)
 	if err != nil {
 		return err
 	}
 	defer f.Close()
-	if strings.HasSuffix(fs.Dir, "") {
+	if strings.HasSuffix(fs.FileName, "") {
 		w := gzip.NewWriter(f)
 		defer w.Close()
 		enc := json.NewEncoder(w)
@@ -49,14 +49,14 @@ func (fs*FileStore) Write(data map[string]string) error {
 func (fs*FileStore) Load() error {
 
 	var err error
-	f, err := os.Open(fs.Dir)
+	f, err := os.Open(fs.FileName)
 	defer f.Close()
 	if err != nil {
 		return err
 	}
 
 	var w io.Reader
-	if strings.HasSuffix(fs.Dir, ".gz") {
+	if strings.HasSuffix(fs.FileName, ".gz") {
 		w, err = gzip.NewReader(f)
 		if err != nil {
 			return err
