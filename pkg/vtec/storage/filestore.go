@@ -25,19 +25,19 @@ func (fs*FileStore) Write(data map[string]string) error {
 	defer fs.mu.RUnlock()
 	toSave := make(map[string]string)
 	for key := range data {
-		toSave[key] = data[key]
+		toSave[key] = string(data[key])
 	}
 	f, err := os.Create(fs.Dir)
 	if err != nil {
 		return err
 	}
 	defer f.Close()
-	if strings.HasSuffix(fs.Dir, "") {
+	if strings.HasSuffix(fs.Dir, ".gz") {
 		w := gzip.NewWriter(f)
 		defer w.Close()
 		enc := json.NewEncoder(w)
 		enc.SetIndent("", " ")
-		return enc.Encode(data)
+		return enc.Encode(toSave)
 	}
 	enc := json.NewEncoder(f)
 	enc.SetIndent("", " ")
