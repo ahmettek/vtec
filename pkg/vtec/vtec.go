@@ -1,4 +1,4 @@
-package storage
+package vtec
 
 import (
 	"fmt"
@@ -10,20 +10,20 @@ var GlobalStore = make(map[string]string)
 type Options struct {
 	Path string
 }
-type Storage struct {}
+type Vtec struct{}
 
-func New(options Options) *Storage {
+func New(options Options) *Vtec {
 	ticker := time.NewTicker(1000 * time.Millisecond)
 	go func() {
 		for range ticker.C {
-			fmt.Println("Tick")
+			fmt.Println("Save" + options.Path)
 		}
 	}()
-	return &Storage{
+	return &Vtec{
 	}
 }
 
-func (s*Storage) Get(key string) string {
+func (s *Vtec) Get(key string) string {
 
 	if val, ok := GlobalStore[key]; ok {
 		fmt.Println(val)
@@ -34,7 +34,7 @@ func (s*Storage) Get(key string) string {
 	return ""
 }
 
-func (s*Storage) Set(key string, value string) bool{
+func (s *Vtec) Set(key string, value string) bool {
 
 	GlobalStore[key] = value
 	fmt.Println(key, "set")

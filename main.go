@@ -3,18 +3,21 @@ package main
 import (
     "encoding/json"
     "github.com/ahmettek/vtec/pkg/api"
-    "github.com/ahmettek/vtec/pkg/storage"
+    "github.com/ahmettek/vtec/pkg/vtec"
     "net/http"
 )
 
 func main() {
     // gopi instance
     g :=gopi.New()
-    s :=storage.New()
-    s.Set("ahmet","tek")
-    response :=s.Get("ahmet")
-    println(response)
 
+    s :=vtec.New(vtec.Options{
+        Path: "/local/temp",
+    })
+
+    s.Set("ahmet","tek")
+    response := s.Get("ahmet")
+    println(response)
 
     // routes
     g.GET("/api/keys/:id",GetData)
