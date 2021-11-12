@@ -19,7 +19,6 @@ type basicApiHandler struct {
 	api *Gopi
 }
 
-// New returns an initialized Gopi structure, ready to use.
 func New() *Gopi {
 	mux := http.NewServeMux()
 	return &Gopi{
@@ -46,9 +45,7 @@ func (e *Gopi) add(method string,path string, handler func(w http.ResponseWriter
 }
 
 func (h *basicApiHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-
 	w.Header().Set("content-type", "application/json")
-
 	for i := range h.api.routes {
 		if h.api.routes[i].Method == r.Method && h.api.routes[i].Path == r.URL.Path {
 			h.api.routes[i].Handler(w,r)

@@ -5,18 +5,31 @@ import (
     "github.com/ahmettek/vtec/pkg/api"
     "net/http"
 )
-type user struct {
-    ID   string `json:"id"`
-    Name string `json:"name"`
-}
+
 func main() {
-    a :=api.New();
-    a.GET("/",GetData)
-    a.Serve("8081")
+    // gopi instance
+    g :=gopi.New()
+
+    // routes
+    g.GET("/api/keys/:id",GetData)
+    g.POST("/api/keys",PostData)
+
+    // start server
+    g.Serve("8081")
 }
 
 func GetData(w http.ResponseWriter, r *http.Request) {
     w.Header().Set("Content-Type", "application/json")
     w.WriteHeader(http.StatusCreated)
     json.NewEncoder(w).Encode(user{ID: "ahmet",Name: "Tek"})
+}
+
+func PostData(w http.ResponseWriter, r *http.Request) {
+    w.Header().Set("Content-Type", "application/json")
+    w.WriteHeader(http.StatusCreated)
+    json.NewEncoder(w).Encode(user{ID: "ahmet",Name: "Tek"})
+}
+type user struct {
+    ID   string `json:"id"`
+    Name string `json:"name"`
 }
