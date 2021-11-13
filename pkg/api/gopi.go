@@ -12,8 +12,8 @@ type Gopi struct {
 
 type GopiContext struct {
 	Param map[string]string
-	w http.ResponseWriter
-	r *http.Request
+	Res http.ResponseWriter
+	Req *http.Request
 }
 
 type Route struct {

@@ -35,10 +35,10 @@ func main() {
     g.Serve("8081")
 }
 
-func GetData(w http.ResponseWriter, r *http.Request) {
-    w.Header().Set("Content-Type", "application/json")
-    w.WriteHeader(http.StatusCreated)
-    json.NewEncoder(w).Encode(user{ID: "ahmet",Name: "Tek"})
+func GetData(c * gopi.GopiContext) {
+    c.Res.Header().Set("Content-Type", "application/json")
+    c.Res.WriteHeader(http.StatusCreated)
+    json.NewEncoder(c.Res).Encode(user{ID: "ahmet",Name: "Tek"})
 }
 func GetDataExpire(w http.ResponseWriter, r *http.Request) {
     w.Header().Set("Content-Type", "application/json")
