@@ -15,6 +15,7 @@ type Store interface {
 
 type Vtec struct{
 	mu sync.Mutex
+	opt Options
 }
 
 type Options struct {
@@ -33,6 +34,7 @@ func New(options Options) *Vtec {
 	}()
 
 	return &Vtec{
+		opt: options,
 	}
 }
 
