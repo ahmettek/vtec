@@ -12,8 +12,8 @@ type Gopi struct {
 
 type GopiContext struct {
 	Param map[string]string
-	Res http.ResponseWriter
-	Req *http.Request
+	Res   http.ResponseWriter
+	Req   *http.Request
 }
 
 type Route struct {
@@ -48,11 +48,11 @@ func (e *Gopi) GET(path string, handler func(c *GopiContext)) {
 	e.add(http.MethodGet, path, handler)
 }
 
-func (e *Gopi) POST(path string, handler func( c *GopiContext)) {
+func (e *Gopi) POST(path string, handler func(c *GopiContext)) {
 	e.add(http.MethodPost, path, handler)
 }
 
-func (e *Gopi) add(method string, path string, handler func( c *GopiContext)) {
+func (e *Gopi) add(method string, path string, handler func(c *GopiContext)) {
 	routes := append(e.routes, Route{Method: method, Path: parsePath(path), Handler: handler})
 	e.routes = routes
 }
@@ -93,7 +93,7 @@ func (h *basicApiHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				}
 			}
 
-			context := InitContext(rPath, curPath)
+			context := InitContext(rPath, curPath, w, r)
 
 			h.api.routes[i].Handler(context)
 			break
@@ -101,8 +101,8 @@ func (h *basicApiHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func InitContext(rPath Path, curPath Path) *GopiContext {
-	context := &GopiContext{ Param: make(map[string]string)}
+func InitContext(rPath Path, curPath Path, w http.ResponseWriter, r *http.Request) *GopiContext {
+	context := &GopiContext{Param: make(map[string]string), Res: w, Req: r}
 	for j := range rPath.splitPath {
 		if strings.HasPrefix(curPath.splitPath[j], ":") {
 			context.Param[curPath.splitPath[j]] = rPath.splitPath[j]

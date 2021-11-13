@@ -38,7 +38,7 @@ func main() {
 func GetData(c * gopi.GopiContext) {
     c.Res.Header().Set("Content-Type", "application/json")
     c.Res.WriteHeader(http.StatusCreated)
-    json.NewEncoder(c.Res).Encode(user{ID: "ahmet",Name: c.Param[":id"]})
+    json.NewEncoder(c.Res).Encode(user{ID: "ahmet"})
 }
 func GetDataExpire(c * gopi.GopiContext) {
     c.Res.Header().Set("Content-Type", "application/json")
