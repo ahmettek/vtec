@@ -91,6 +91,7 @@ func (h *basicApiHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 			if success {
 				h.api.routes[i].Handler(w,r)
+				break
 			}
 
 		}

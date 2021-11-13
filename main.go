@@ -28,7 +28,8 @@ func main() {
     v.Set("sds","baba")
     // routes
     g.GET("/api/keys/:id",GetData)
-    g.GET("/api/keys",PostData)
+    g.GET("/api/keys/:id/expires/:date",GetData)
+    g.POST("/api/keys",PostData)
 
     // start server
     g.Serve("8081")
@@ -39,7 +40,11 @@ func GetData(w http.ResponseWriter, r *http.Request) {
     w.WriteHeader(http.StatusCreated)
     json.NewEncoder(w).Encode(user{ID: "ahmet",Name: "Tek"})
 }
-
+func GetDataExpire(w http.ResponseWriter, r *http.Request) {
+    w.Header().Set("Content-Type", "application/json")
+    w.WriteHeader(http.StatusCreated)
+    json.NewEncoder(w).Encode(user{ID: "expires ok",Name: "Tek"})
+}
 func PostData(w http.ResponseWriter, r *http.Request) {
     w.Header().Set("Content-Type", "application/json")
     w.WriteHeader(http.StatusCreated)
