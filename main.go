@@ -7,8 +7,13 @@ import (
     "github.com/ahmettek/vtec/pkg/vtec/storage"
     "net/http"
 )
-
+type routing struct {
+    params []string
+    url string
+    absolutePath string
+}
 func main() {
+
     // gopi instance
     g :=gopi.New()
 
@@ -23,7 +28,7 @@ func main() {
     v.Set("sds","baba")
     // routes
     g.GET("/api/keys/:id",GetData)
-    g.POST("/api/keys",PostData)
+    g.GET("/api/keys",PostData)
 
     // start server
     g.Serve("8081")
