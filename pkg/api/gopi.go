@@ -79,7 +79,7 @@ func (h *basicApiHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		rPath := parsePath(r.URL.Path)
 		curPath := h.api.routes[i].Path
 
-		if h.api.routes[i].Method == r.Method && curPath.absolutePath == rPath.absolutePath && len(curPath.params) == len(rPath.params) {
+		if h.api.routes[i].Method == r.Method {
 
 			success := true
 			for j := range rPath.splitPath {
