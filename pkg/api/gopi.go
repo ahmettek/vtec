@@ -102,7 +102,7 @@ func (h *basicApiHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func InitContext(rPath Path, curPath Path) *GopiContext {
-	context := &GopiContext{}
+	context := &GopiContext{ Param: make(map[string]string)}
 	for j := range rPath.splitPath {
 		if strings.HasPrefix(curPath.splitPath[j], ":") {
 			context.Param[curPath.splitPath[j]] = rPath.splitPath[j]
