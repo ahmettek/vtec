@@ -23,9 +23,15 @@ func main() {
             Dir: "humans.json",
         },
     })
-    v.Set("atek","baba")
-    v.Set("s","baba")
-    v.Set("sds","baba")
+    v.Set("atek","ba3ba")
+    v.Set("atesk","baaba")
+    v.Set("ateek","babda")
+    v.Set("ateaaek","babda")
+    v.Set("ateeeek","babda")
+    v.Set("aeteek","babda")
+    v.Set("dateek","babda")
+    v.Set("at34eek","babda")
+
     // routes
     g.GET("/api/keys/:id",GetData)
     g.GET("/api/keys/:id/expires/:date",GetDataExpire)
@@ -38,7 +44,7 @@ func main() {
 func GetData(c * gopi.GopiContext) {
     c.Res.Header().Set("Content-Type", "application/json")
     c.Res.WriteHeader(http.StatusCreated)
-    json.NewEncoder(c.Res).Encode(user{ID: "ahmet"})
+    json.NewEncoder(c.Res).Encode(user{ID: "ahmet",Name: c.Param[":id"]})
 }
 func GetDataExpire(c * gopi.GopiContext) {
     c.Res.Header().Set("Content-Type", "application/json")

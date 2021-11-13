@@ -52,6 +52,10 @@ func (e *Gopi) POST(path string, handler func(c *GopiContext)) {
 	e.add(http.MethodPost, path, handler)
 }
 
+func (e *Gopi) DELETE(path string, handler func(c *GopiContext)) {
+	e.add(http.MethodDelete, path, handler)
+}
+
 func (e *Gopi) add(method string, path string, handler func(c *GopiContext)) {
 	routes := append(e.routes, Route{Method: method, Path: parsePath(path), Handler: handler})
 	e.routes = routes

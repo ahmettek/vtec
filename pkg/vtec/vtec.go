@@ -25,12 +25,13 @@ func New(options Options) *Vtec {
 
 	options.Storage.Load()
 
-	ticker := time.NewTicker(1000 * time.Millisecond)
+	ticker := time.NewTicker(10000 * time.Millisecond)
 	go func() {
 		for range ticker.C {
 			Sync(options.Storage)
 		}
 	}()
+
 	return &Vtec{
 	}
 }
@@ -48,10 +49,9 @@ func (s *Vtec) Get(key string) string {
 
 func (s *Vtec) Set(key string, value string) bool {
 	s.mu.Lock()
-	GlobalStore[key] = value
 	defer s.mu.Unlock()
 
-	fmt.Println(key, "set")
+	GlobalStore[key] = value
 	return true
 }
 
