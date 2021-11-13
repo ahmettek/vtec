@@ -28,7 +28,7 @@ func main() {
     v.Set("sds","baba")
     // routes
     g.GET("/api/keys/:id",GetData)
-    g.GET("/api/keys/:id/expires/:date",GetData)
+    g.GET("/api/keys/:id/expires/:date",GetDataExpire)
     g.POST("/api/keys",PostData)
 
     // start server

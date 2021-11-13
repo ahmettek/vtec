@@ -6,20 +6,26 @@ import (
 )
 
 type Gopi struct {
-	routes  []Route
-	mux *http.ServeMux
+	routes []Route
+	mux    *http.ServeMux
+}
+
+type GopiContext struct {
+	Param map[string]string
+	w http.ResponseWriter
+	r *http.Request
 }
 
 type Route struct {
-	Method string
-	Path   Path
-	Handler   func(w http.ResponseWriter, r *http.Request)
+	Method  string
+	Path    Path
+	Handler func(c *GopiContext)
 }
 
 type Path struct {
-	params []string
+	params       []string
 	absolutePath string
-	splitPath []string
+	splitPath    []string
 }
 
 type basicApiHandler struct {
@@ -33,41 +39,41 @@ func New() *Gopi {
 	}
 }
 
-func (g*Gopi) Serve(port string) {
-	g.mux.Handle("/",&basicApiHandler{g})
+func (g *Gopi) Serve(port string) {
+	g.mux.Handle("/", &basicApiHandler{g})
 	http.ListenAndServe(":"+port, g.mux)
 }
 
-func (e *Gopi) GET(path string,handler func(w http.ResponseWriter, r *http.Request)) {
-	 e.add(http.MethodGet,path,handler)
+func (e *Gopi) GET(path string, handler func(c *GopiContext)) {
+	e.add(http.MethodGet, path, handler)
 }
 
-func (e *Gopi) POST(path string,handler func(w http.ResponseWriter, r *http.Request)) {
-	e.add(http.MethodPost,path,handler)
+func (e *Gopi) POST(path string, handler func( c *GopiContext)) {
+	e.add(http.MethodPost, path, handler)
 }
 
-func (e *Gopi) add(method string,path string, handler func(w http.ResponseWriter, r *http.Request)) {
-	routes := append(e.routes, Route{Method: method, Path: parsePath(path),Handler: handler})
-	e.routes=routes;
+func (e *Gopi) add(method string, path string, handler func( c *GopiContext)) {
+	routes := append(e.routes, Route{Method: method, Path: parsePath(path), Handler: handler})
+	e.routes = routes
 }
 
-func parsePath(url string) Path{
+func parsePath(url string) Path {
 
-	routData :=&Path{};
-	absolutePath :=""
+	routData := &Path{}
+	absolutePath := ""
 	split := strings.Split(url, "/")
 	for i, s := range split {
 
 		if strings.Contains(s, ":") {
 			routData.params = append(routData.params, s)
-			routData.splitPath= append(routData.splitPath, s)
-		}else{
-			absolutePath += s+"/"
-			routData.splitPath= append(routData.splitPath, s)
+			routData.splitPath = append(routData.splitPath, s)
+		} else {
+			absolutePath += s + "/"
+			routData.splitPath = append(routData.splitPath, s)
 		}
 		println(i)
 	}
-	routData.absolutePath =absolutePath
+	routData.absolutePath = absolutePath
 
 	return *routData
 }
@@ -79,22 +85,29 @@ func (h *basicApiHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		rPath := parsePath(r.URL.Path)
 		curPath := h.api.routes[i].Path
 
-		if h.api.routes[i].Method == r.Method && len(rPath.splitPath) == len(curPath.splitPath){
+		if h.api.routes[i].Method == r.Method && len(rPath.splitPath) == len(curPath.splitPath) {
 
-
-			success := true
 			for j := range rPath.splitPath {
 				if !strings.HasPrefix(curPath.splitPath[j], ":") && rPath.splitPath[j] != curPath.splitPath[j] {
-				success=false
-				break
+					break
 				}
 			}
 
-			if success {
-				h.api.routes[i].Handler(w,r)
-				break
-			}
+			context := InitContext(rPath, curPath)
 
+			h.api.routes[i].Handler(context)
+			break
 		}
 	}
+}
+
+func InitContext(rPath Path, curPath Path) *GopiContext {
+	context := &GopiContext{}
+	for j := range rPath.splitPath {
+		if strings.HasPrefix(curPath.splitPath[j], ":") {
+			context.Param[curPath.splitPath[j]] = rPath.splitPath[j]
+		}
+	}
+
+	return context
 }
