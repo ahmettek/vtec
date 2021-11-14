@@ -12,9 +12,9 @@ To start using vtec, install Go and run go get:
 ```sh
 $ go get -u github.com/ahmettek/vtec
 ```
-####App Usage
+#### App Usage
 
-####Package Usage
+#### Package Usage
 
 Create a store, add key and play with it.
 
