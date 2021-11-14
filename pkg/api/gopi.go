@@ -82,7 +82,13 @@ func parsePath(url string) Path {
 
 func (h *basicApiHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("content-type", "application/json")
-	context := &GopiContext{Param: make(map[string]string), Res: w, Req: r}
+
+	context := &GopiContext{
+		Param: make(map[string]string),
+		Res: w,
+		Req: r,
+	}
+
 	for i := range h.api.routes {
 
 		reqPath := parsePath(r.URL.Path)

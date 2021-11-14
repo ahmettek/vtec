@@ -11,23 +11,23 @@ import (
 )
 
 type FileStore struct {
-	Dir string
-	mu  sync.RWMutex
+	FileName string
+	mtx  sync.RWMutex
 }
 
 func (fs *FileStore) Write(data map[string]string) error {
-	fs.mu.RLock()
-	defer fs.mu.RUnlock()
+	fs.mtx.RLock()
+	defer fs.mtx.RUnlock()
 	toSave := make(map[string]string)
 	for key := range data {
 		toSave[key] = string(data[key])
 	}
-	f, err := os.Create(fs.Dir)
+	f, err := os.Create(fs.FileName)
 	if err != nil {
 		return err
 	}
 	defer f.Close()
-	if strings.HasSuffix(fs.Dir, ".gz") {
+	if strings.HasSuffix(fs.FileName, ".gz") {
 		w := gzip.NewWriter(f)
 		defer w.Close()
 		enc := json.NewEncoder(w)
@@ -42,16 +42,18 @@ func (fs *FileStore) Write(data map[string]string) error {
 }
 
 func (fs *FileStore) Recover() error {
+	fs.mtx.RLock()
+	defer fs.mtx.RUnlock()
 
 	var err error
-	f, err := os.Open(fs.Dir)
+	f, err := os.Open(fs.FileName)
 	defer f.Close()
 	if err != nil {
 		return err
 	}
 
 	var w io.Reader
-	if strings.HasSuffix(fs.Dir, ".gz") {
+	if strings.HasSuffix(fs.FileName, ".gz") {
 		w, err = gzip.NewReader(f)
 		if err != nil {
 			return err
@@ -67,22 +69,5 @@ func (fs *FileStore) Recover() error {
 	}
 
 	vtec.GlobalStore = toOpen
-
-	/*dir:=f.Dir
-	var err error
-	_, err = os.Stat(f.Dir)
-	if err != nil {
-		// file not exists - create dirs if any
-		if os.IsNotExist(err) {
-			if dir != "." {
-				err = os.MkdirAll(dir, os.FileMode(dirMode))
-				if err != nil {
-					return err
-				}
-			}
-		} else {
-			return err
-		}
-	}*/
 	return nil
 }

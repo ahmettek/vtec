@@ -54,7 +54,8 @@ func (s *Vtec) Set(key string, value string) bool {
 }
 
 func AutoSync(o * Options){
-	ticker := time.NewTicker(10000 * time.Millisecond)
+
+	ticker := time.NewTicker(time.Duration(o.SyncInternal)* time.Millisecond)
 
 	go func() {
 		for range ticker.C {
