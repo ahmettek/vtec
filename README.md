@@ -12,9 +12,17 @@ To start using vtec, install Go and run go get:
 ```sh
 $ go get -u github.com/ahmettek/vtec
 ```
-#### App Usage
-
-#### Package Usage
+### App Usage
+- **Locally**:
+```sh
+go run main.go
+```
+- **Docker**:
+```sh
+docker build --tag vtec .
+docker run -p 8081:8081 vtec
+```
+### Package Usage
 
 Create a store, add key and play with it.
 
