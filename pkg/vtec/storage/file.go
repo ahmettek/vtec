@@ -10,17 +10,12 @@ import (
 	"sync"
 )
 
-const (
-	dirMode = 0755
-	fileMode = 0644
-)
-
 type FileStore struct {
 	Dir string
-	mu sync.RWMutex
+	mu  sync.RWMutex
 }
 
-func (fs*FileStore) Write(data map[string]string) error {
+func (fs *FileStore) Write(data map[string]string) error {
 	fs.mu.RLock()
 	defer fs.mu.RUnlock()
 	toSave := make(map[string]string)
@@ -46,7 +41,7 @@ func (fs*FileStore) Write(data map[string]string) error {
 	return nil
 }
 
-func (fs*FileStore) Load() error {
+func (fs *FileStore) Recover() error {
 
 	var err error
 	f, err := os.Open(fs.Dir)

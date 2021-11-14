@@ -36,7 +36,7 @@ func main() {
     g.GET("/api/keys/:id",GetData)
     g.GET("/api/keys/:id/expires/:date",GetDataExpire)
     g.POST("/api/keys",PostData)
-    g.HealthCheck()
+    g.HealthCheck("/health")
     // start server
     g.Listen("8081")
 }

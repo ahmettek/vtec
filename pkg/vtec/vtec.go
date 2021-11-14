@@ -9,7 +9,7 @@ import (
 var GlobalStore = make(map[string]string)
 
 type Store interface {
-	Load() error
+	Recover() error
 	Write(data map[string]string) error
 }
 
@@ -25,7 +25,7 @@ type Options struct {
 
 func New(options Options) *Vtec {
 
-	options.Storage.Load()
+	options.Storage.Recover()
 
 	AutoSync(&options)
 
