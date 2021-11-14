@@ -1,5 +1,5 @@
 ### vtec
-<img src = "vtec-logo.jpg">
+<img src = "vtec-logo.jpg" width="200">
 vtec, is a simple in-memory key-value store application.
 
 vtec provides persistence by appending transactions to a json file and restoring data from the json file on startup.
