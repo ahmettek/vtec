@@ -37,7 +37,7 @@ func New() *Gopi {
 	}
 }
 
-func (g *Gopi) Serve(port string) {
+func (g *Gopi) Listen(port string) {
 	g.mux.Handle("/", &basicApiHandler{g})
 	http.ListenAndServe(":"+port, g.mux)
 }
@@ -52,6 +52,12 @@ func (e *Gopi) POST(path string, handler func(c *GopiContext)) {
 
 func (e *Gopi) DELETE(path string, handler func(c *GopiContext)) {
 	e.add(http.MethodDelete, path, handler)
+}
+
+func (e *Gopi) HealthCheck(path string) {
+	e.add(http.MethodDelete, path, func(c *GopiContext) {
+		c.Res.WriteHeader(http.StatusOK)
+	})
 }
 
 func (e *Gopi) add(method string, path string, handler func(c *GopiContext)) {
@@ -79,18 +85,18 @@ func (h *basicApiHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	context := &GopiContext{Param: make(map[string]string), Res: w, Req: r}
 	for i := range h.api.routes {
 
-		rPath := parsePath(r.URL.Path)
+		reqPath := parsePath(r.URL.Path)
 		curPath := h.api.routes[i].Path
 
-		if h.api.routes[i].Method == r.Method && len(rPath.splitPath) == len(curPath.splitPath) {
+		if h.api.routes[i].Method == r.Method && len(reqPath.splitPath) == len(curPath.splitPath) {
 
-			for j := range rPath.splitPath {
-				if !strings.HasPrefix(curPath.splitPath[j], ":") && rPath.splitPath[j] != curPath.splitPath[j] {
+			for j := range reqPath.splitPath {
+				if !strings.HasPrefix(curPath.splitPath[j], ":") && reqPath.splitPath[j] != curPath.splitPath[j] {
 					break
 				}
 			}
 
-			context.Param = BindParams(rPath,curPath)
+			context.Param = BindParams(reqPath,curPath)
 
 			h.api.routes[i].Handler(context)
 			break

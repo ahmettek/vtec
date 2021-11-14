@@ -36,9 +36,9 @@ func main() {
     g.GET("/api/keys/:id",GetData)
     g.GET("/api/keys/:id/expires/:date",GetDataExpire)
     g.POST("/api/keys",PostData)
-
+    g.HealthCheck()
     // start server
-    g.Serve("8081")
+    g.Listen("8081")
 }
 
 func GetData(c * gopi.GopiContext) {
