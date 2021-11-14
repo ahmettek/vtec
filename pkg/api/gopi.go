@@ -84,6 +84,7 @@ func parsePath(url string) Path {
 
 func (h *basicApiHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("content-type", "application/json")
+	context := &GopiContext{Param: make(map[string]string), Res: w, Req: r}
 	for i := range h.api.routes {
 
 		rPath := parsePath(r.URL.Path)
@@ -97,12 +98,21 @@ func (h *basicApiHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				}
 			}
 
-			context := InitContext(rPath, curPath, w, r)
+			context.Param = BindParams(rPath,curPath)
 
 			h.api.routes[i].Handler(context)
 			break
 		}
 	}
+}
+func BindParams(reqPath Path, curPath Path) map[string]string {
+	params := make(map[string]string)
+	for j := range reqPath.splitPath {
+		if strings.HasPrefix(curPath.splitPath[j], ":") {
+			params[curPath.splitPath[j]] = reqPath.splitPath[j]
+		}
+	}
+	return params
 }
 
 func InitContext(rPath Path, curPath Path, w http.ResponseWriter, r *http.Request) *GopiContext {
