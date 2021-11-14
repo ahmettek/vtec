@@ -20,18 +20,14 @@ type Vtec struct{
 
 type Options struct {
 	Storage Store
+	SyncInternal int
 }
 
 func New(options Options) *Vtec {
 
 	options.Storage.Load()
 
-	ticker := time.NewTicker(10000 * time.Millisecond)
-	go func() {
-		for range ticker.C {
-			Sync(options.Storage)
-		}
-	}()
+	AutoSync(&options)
 
 	return &Vtec{
 		opt: options,
@@ -57,6 +53,15 @@ func (s *Vtec) Set(key string, value string) bool {
 	return true
 }
 
+func AutoSync(o * Options){
+	ticker := time.NewTicker(10000 * time.Millisecond)
+
+	go func() {
+		for range ticker.C {
+			Sync(o.Storage)
+		}
+	}()
+}
 func Sync(s Store) bool {
 	s.Write(GlobalStore)
 	return true
