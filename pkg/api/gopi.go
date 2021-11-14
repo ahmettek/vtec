@@ -1,6 +1,7 @@
 package gopi
 
 import (
+	"log"
 	"net/http"
 	"strings"
 )
@@ -105,6 +106,15 @@ func (h *basicApiHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			context.Param = BindParams(reqPath,curPath)
 
 			h.api.routes[i].Handler(context)
+
+			log.Printf(
+				"[%s] %s %s %s",
+				r.Method,
+				r.Host,
+				r.URL.Path,
+				r.URL.RawQuery,
+			)
+
 			break
 		}
 	}

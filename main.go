@@ -7,11 +7,7 @@ import (
     "github.com/ahmettek/vtec/pkg/vtec/storage"
     "net/http"
 )
-type routing struct {
-    params []string
-    url string
-    absolutePath string
-}
+
 func main() {
 
     // gopi instance
