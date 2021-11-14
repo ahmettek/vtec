@@ -23,8 +23,6 @@ type Route struct {
 }
 
 type Path struct {
-	params       []string
-	absolutePath string
 	splitPath    []string
 }
 
@@ -64,21 +62,15 @@ func (e *Gopi) add(method string, path string, handler func(c *GopiContext)) {
 func parsePath(url string) Path {
 
 	routData := &Path{}
-	absolutePath := ""
 	split := strings.Split(url, "/")
-	for i, s := range split {
 
-		if strings.Contains(s, ":") {
-			routData.params = append(routData.params, s)
-			routData.splitPath = append(routData.splitPath, s)
+	for i := 0; i <len(split); i++ {
+		if strings.Contains(split[i], ":") {
+			routData.splitPath = append(routData.splitPath, split[i])
 		} else {
-			absolutePath += s + "/"
-			routData.splitPath = append(routData.splitPath, s)
+			routData.splitPath = append(routData.splitPath, split[i])
 		}
-		println(i)
 	}
-	routData.absolutePath = absolutePath
-
 	return *routData
 }
 
@@ -105,6 +97,7 @@ func (h *basicApiHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 }
+
 func BindParams(reqPath Path, curPath Path) map[string]string {
 	params := make(map[string]string)
 	for j := range reqPath.splitPath {
@@ -113,15 +106,4 @@ func BindParams(reqPath Path, curPath Path) map[string]string {
 		}
 	}
 	return params
-}
-
-func InitContext(rPath Path, curPath Path, w http.ResponseWriter, r *http.Request) *GopiContext {
-	context := &GopiContext{Param: make(map[string]string), Res: w, Req: r}
-	for j := range rPath.splitPath {
-		if strings.HasPrefix(curPath.splitPath[j], ":") {
-			context.Param[curPath.splitPath[j]] = rPath.splitPath[j]
-		}
-	}
-
-	return context
 }
