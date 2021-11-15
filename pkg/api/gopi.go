@@ -55,6 +55,10 @@ func (e *Gopi) DELETE(path string, handler func(c *GopiContext)) {
 	e.add(http.MethodDelete, path, handler)
 }
 
+func (e *Gopi) DELETE2(path string, handler func(c *GopiContext)) {
+	e.add(http.MethodDelete, path, handler)
+}
+
 func (e *Gopi) HealthCheck(path string) {
 	e.add(http.MethodDelete, path, func(c *GopiContext) {
 		c.Res.WriteHeader(http.StatusOK)

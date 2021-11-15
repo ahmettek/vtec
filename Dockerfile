@@ -1,18 +1,20 @@
-# Dockerfile for installing yakv
-
-# Build the binary
-FROM golang:1.14 as build
-COPY . /src
-WORKDIR /src
-RUN go build -o vtec
-
-# Add the Alpine Linux image
-FROM alpine
-
-# Copy binary
-COPY --from=build /src/vtec .
-
-# Copy certificate and key
-COPY --from=build /src/*.pem .
-
-EXPOSE 8081
+## We specify the base image we need for our
+## go application
+FROM golang:1.14.0-alpine
+## We create an /app directory within our
+## image that will hold our application source
+## files
+RUN mkdir /app
+## We copy everything in the root directory
+## into our /app directory
+ADD . /app
+## We specify that we now wish to execute
+## any further commands inside our /app
+## directory
+WORKDIR /app
+## we run go build to compile the binary
+## executable of our Go program
+RUN go build -o main.go ./cmd/api
+## Our start command which kicks off
+## our newly created binary executable
+CMD ["/app/main"]

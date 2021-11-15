@@ -63,6 +63,7 @@ func AutoSync(o * Options){
 		}
 	}()
 }
+
 func Sync(s Store) bool {
 	s.Write(GlobalStore)
 	return true
