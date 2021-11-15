@@ -1,11 +1,14 @@
 package routes
 
-import gopi "github.com/ahmettek/vtec/pkg/api"
+import (
+	"github.com/ahmettek/vtec/cmd/api/handlers/get"
+	gopi "github.com/ahmettek/vtec/pkg/api"
+)
 
 func AddRoutes(g*gopi.Gopi)  {
-	g.GET("/api/values/:id",GetData)
-	g.POST("/api/values",PostData)
-	g.DELETE("/api/values",DeleteData)
+	g.GET("/api/values/:id",handlers.Get)
+	g.POST("/api/values",handlers.Set)
+	g.DELETE("/api/values",handlers.Flush)
 }
 
 
