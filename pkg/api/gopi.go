@@ -38,9 +38,10 @@ func New() *Gopi {
 	}
 }
 
-func (g *Gopi) Listen(port string) {
+func (g *Gopi) Listen(port string) error{
 	g.mux.Handle("/", &basicApiHandler{g})
-	http.ListenAndServe(":"+port, g.mux)
+	err :=http.ListenAndServe(":"+port, g.mux)
+	return err
 }
 
 func (e *Gopi) GET(path string, handler func(c *GopiContext)) {
