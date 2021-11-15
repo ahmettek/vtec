@@ -27,7 +27,7 @@ func main() {
     v.Set("ateeeek","babda")
     v.Set("aeteek","babda")
     v.Set("dateek","babda")
-    v.Set("at34eek","babda")
+    v.Set("at34eek","baxbda")
 
     // routes
     g.GET("/api/keys/:id",GetData)
