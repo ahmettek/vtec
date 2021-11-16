@@ -1,7 +1,7 @@
 package gopi
 
 import (
-	"log"
+	"github.com/ahmettek/vtec/pkg/logger"
 	"net/http"
 	"strings"
 )
@@ -87,6 +87,13 @@ func parsePath(url string) Path {
 }
 
 func (h *basicApiHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+
+	logger.Info.Printf("[%s] %s %s %s",
+		r.Method,
+		r.Host,
+		r.URL.Path,
+		r.URL.RawQuery)
+
 	w.Header().Set("content-type", "application/json")
 
 	context := &GopiContext{
@@ -95,12 +102,17 @@ func (h *basicApiHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		Req: r,
 	}
 
+	h.Handle(context)
+
+}
+
+func (h *basicApiHandler)  Handle(gc*GopiContext)  {
 	for i := range h.api.routes {
 
-		reqPath := parsePath(r.URL.Path)
+		reqPath := parsePath(gc.Req.URL.Path)
 		curPath := h.api.routes[i].Path
 
-		if h.api.routes[i].Method == r.Method && len(reqPath.splitPath) == len(curPath.splitPath) {
+		if h.api.routes[i].Method == gc.Req.Method && len(reqPath.splitPath) == len(curPath.splitPath) {
 
 			for j := range reqPath.splitPath {
 				if !strings.HasPrefix(curPath.splitPath[j], ":") && reqPath.splitPath[j] != curPath.splitPath[j] {
@@ -108,23 +120,14 @@ func (h *basicApiHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				}
 			}
 
-			context.Param = BindParams(reqPath,curPath)
+			gc.Param = BindParams(reqPath,curPath)
 
-			h.api.routes[i].Handler(context)
-
-			log.Printf(
-				"[%s] %s %s %s",
-				r.Method,
-				r.Host,
-				r.URL.Path,
-				r.URL.RawQuery,
-			)
+			h.api.routes[i].Handler(gc)
 
 			break
 		}
 	}
 }
-
 func BindParams(reqPath Path, curPath Path) map[string]string {
 	params := make(map[string]string)
 	for j := range reqPath.splitPath {

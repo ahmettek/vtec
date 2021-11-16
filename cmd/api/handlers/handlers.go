@@ -21,15 +21,21 @@ func (v * ValuesHandler) Set(c * gopi.GopiContext) {
 		return
 	}
 
+	v.vtec.Set(body.Key,body.Value)
+
 	c.Res.WriteHeader(http.StatusCreated)
 	json.NewEncoder(c.Res).Encode(true)
 }
 
 func (v * ValuesHandler)  Get(c * gopi.GopiContext) {
 	key:= c.Param[":id"]
-	v.vtec.Get(key)
+	val :=v.vtec.Get(key)
+
+	if val == "" {
+		c.Res.WriteHeader(http.StatusNotFound)
+	}
 	c.Res.WriteHeader(http.StatusOK)
-	json.NewEncoder(c.Res).Encode(true)
+	json.NewEncoder(c.Res).Encode(&models.GetResponseModel{Value: val})
 }
 
 func (v * ValuesHandler)  Flush(c * gopi.GopiContext) {

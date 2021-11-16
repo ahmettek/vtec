@@ -1,7 +1,6 @@
 package vtec
 
 import (
-	"fmt"
 	"sync"
 	"time"
 )
@@ -37,18 +36,16 @@ func New(options Options) *Vtec {
 func (s *Vtec) Get(key string) string {
 
 	if val, ok := GlobalStore[key]; ok {
-		fmt.Println(val)
 		return val
-	} else {
-		fmt.Println(key, "not set")
 	}
+
 	return ""
 }
 
 func (s *Vtec) Set(key string, value string) bool {
 	s.mu.Lock()
 	defer s.mu.Unlock()
-
+	//MAX SIZE CONTROL AND RETURN ERR
 	GlobalStore[key] = value
 	return true
 }

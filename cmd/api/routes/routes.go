@@ -8,7 +8,7 @@ import (
 
 func AddRoutes(g*gopi.Gopi,v*vtec.Vtec)  {
 
-	vhandlers := handlers.NewValuesHandler(v)
+	vhandlers := handlers.NewValuesHandler(*v)
 
 	g.GET("/api/values/:id",vhandlers.Get)
 	g.POST("/api/values",vhandlers.Set)

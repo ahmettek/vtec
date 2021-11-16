@@ -11,14 +11,15 @@ func main() {
 
     g :=gopi.New()
 
-
     v:=vtec.New(vtec.Options{
         SyncInternal: 1000,
         Storage: &storage.FileStore{
             FileName: "keyvalue-store.json",
         },
     })
+
     routes.AddRoutes(g,v)
+
     g.HealthCheck("/health")
     g.Listen("8081")
 }
