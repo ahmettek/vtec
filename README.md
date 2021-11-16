@@ -44,7 +44,7 @@ value := v.Get("my_string")
 fmt.Println(value) // Hello World!
 ```
 
-#### Gopi Basic Web Framework
+#### Gopi Basic http Handler Wrapper
 Create a api, add end point and serve!
 
 - **Create Api**:

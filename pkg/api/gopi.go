@@ -103,7 +103,6 @@ func (h *basicApiHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	h.Handle(context)
-
 }
 
 func (h *basicApiHandler)  Handle(gc*GopiContext)  {
@@ -128,6 +127,7 @@ func (h *basicApiHandler)  Handle(gc*GopiContext)  {
 		}
 	}
 }
+
 func BindParams(reqPath Path, curPath Path) map[string]string {
 	params := make(map[string]string)
 	for j := range reqPath.splitPath {
