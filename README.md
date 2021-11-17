@@ -53,7 +53,7 @@ api :=gopi.New()
 ```go
 api.GET("/api/values/:id",func (g*GopiContext){})
 api.POST("/api/values",func (g*GopiContext){})
-api.DELETE("/api/values/:id",func (g*GopiContext){})
+api.DELETE("/api/values/",func (g*GopiContext){})
 ```
 - **Handle Params**:
 ```go
