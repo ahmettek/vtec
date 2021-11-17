@@ -35,9 +35,7 @@ v := vtec.New(vtec.Options{
     },
 })
 
-if err := v.Set("my_string", "Hello World!"); err != nil {
-  // handle error
-}
+v.Set("my_string", "Hello World!");
 
 value := v.Get("my_string")
 
