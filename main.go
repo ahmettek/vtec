@@ -21,5 +21,5 @@ func main() {
     routes.AddRoutes(g,v)
 
     g.HealthCheck("/health")
-    g.Listen("8081")
+    g.Listen("80")
 }
