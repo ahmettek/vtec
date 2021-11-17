@@ -12,14 +12,14 @@ type Store interface {
 	Write(data map[string]string) error
 }
 
-type Vtec struct{
-	mu sync.Mutex
-	opt Options
+type Vtec struct {
+	mu    sync.Mutex
+	opt   Options
 }
 
 type Options struct {
-	Storage Store
-	SyncInternal int
+	Storage       Store
+	SyncInternal  int
 }
 
 func New(options Options) *Vtec {
@@ -33,26 +33,26 @@ func New(options Options) *Vtec {
 	}
 }
 
-func (s *Vtec) Get(key string) string {
+func (s *Vtec) Get(key string) (*string) {
 
 	if val, ok := GlobalStore[key]; ok {
-		return val
+		return &val
 	}
 
-	return ""
+	return nil
 }
 
-func (s *Vtec) Set(key string, value string) bool {
+func (s *Vtec) Set(key string, value string){
 	s.mu.Lock()
-	defer s.mu.Unlock()
-	//MAX SIZE CONTROL AND RETURN ERR
+
 	GlobalStore[key] = value
-	return true
+
+	defer s.mu.Unlock()
 }
 
-func AutoSync(o * Options){
+func AutoSync(o *Options) {
 
-	ticker := time.NewTicker(time.Duration(o.SyncInternal)* time.Millisecond)
+	ticker := time.NewTicker(time.Duration(o.SyncInternal) * time.Millisecond)
 
 	go func() {
 		for range ticker.C {
