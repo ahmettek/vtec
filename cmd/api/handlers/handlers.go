@@ -13,38 +13,33 @@ type ValuesHandler struct {
 }
 
 func (v *ValuesHandler) Set(c *gopi.GopiContext) {
-	body := &models.SetModel{}
+	body := &models.SetRequestModel{}
 	err := json.NewDecoder(c.Req.Body).Decode(&body)
 
 	if err != nil {
-		http.Error(c.Res, err.Error(), http.StatusBadRequest)
-		return
+		c.Json(&models.SetResponseModel{Success: false},http.StatusBadRequest)
 	}
 
 	v.vtec.Set(body.Key, body.Value)
 
-	c.Res.WriteHeader(http.StatusCreated)
-	json.NewEncoder(c.Res).Encode(true)
+	c.Json(&models.SetResponseModel{Success: true},http.StatusOK)
 }
 
 func (v *ValuesHandler) Get(c *gopi.GopiContext) {
 	key := c.Param[":id"]
-
 	val := v.vtec.Get(key)
 
 	if val == nil {
-		c.Res.WriteHeader(http.StatusNotFound)
-	}else {
-		c.Res.WriteHeader(http.StatusOK)
+		c.Json(nil, http.StatusNotFound)
+		return
 	}
 
-	json.NewEncoder(c.Res).Encode(&models.GetResponseModel{Value: *val})
+	c.Json(&models.GetResponseModel{Value: *val}, http.StatusOK)
 }
 
 func (v *ValuesHandler) Flush(c *gopi.GopiContext) {
-
-	c.Res.WriteHeader(http.StatusOK)
-	json.NewEncoder(c.Res).Encode(true)
+	v.vtec.Flush()
+	c.Json(&models.FlushResponseModel{Success: true},http.StatusOK)
 }
 
 func NewValuesHandler(v vtec.Vtec) *ValuesHandler {

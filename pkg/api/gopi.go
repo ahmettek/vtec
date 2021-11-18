@@ -1,6 +1,7 @@
 package gopi
 
 import (
+	"encoding/json"
 	"github.com/ahmettek/vtec/pkg/logger"
 	"net/http"
 	"strings"
@@ -9,6 +10,7 @@ import (
 type Gopi struct {
 	routes []Route
 	mux    *http.ServeMux
+	context GopiContext
 }
 
 type GopiContext struct {
@@ -35,6 +37,7 @@ func New() *Gopi {
 	mux := http.NewServeMux()
 	return &Gopi{
 		mux: mux,
+		context: GopiContext{},
 	}
 }
 
@@ -57,9 +60,15 @@ func (e *Gopi) DELETE(path string, handler func(c *GopiContext)) {
 }
 
 func (e *Gopi) HealthCheck(path string) {
-	e.add(http.MethodDelete, path, func(c *GopiContext) {
-		c.Res.WriteHeader(http.StatusOK)
+	e.add(http.MethodGet, path, func(c *GopiContext) {
+		c.Json(true,http.StatusOK)
 	})
+}
+
+func (e *GopiContext) Json(model interface{},httpStatus int) {
+	e.Res.WriteHeader(httpStatus)
+	json.NewEncoder(e.Res).Encode(model)
+	return
 }
 
 func (e *Gopi) add(method string, path string, handler func(c *GopiContext)) {

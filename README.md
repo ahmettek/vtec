@@ -1,5 +1,5 @@
 ### vtec
-<img src = "vtec-logo.jpg" width="200">
+<img src = "static/vtec-logo.jpg" width="200">
 
 vtec, is a simple in-memory key-value store application.
 
@@ -22,6 +22,20 @@ go run main.go
 ```sh
 docker build --tag vtec .   
 docker run -p 5005:80 vtec
+```
+- **End Points**:
+```sh
+[POST] http://localhost:5005/api/values
+{
+  "Key": "test",
+  "Value":"value"
+}
+[GET] http://localhost:5005/api/values/:key
+[DELETE] http://localhost:5005/api/values
+
+OR
+
+Postman Collection: https://github.com/ahmettek/vtec/static/endpoints.postman_collection.json
 ```
 ### Package Usage
 #### Vtec Key-Value Store

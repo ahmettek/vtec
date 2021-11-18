@@ -9,17 +9,17 @@ import (
 
 func main() {
 
-    g :=gopi.New()
+    api :=gopi.New()
 
     v:=vtec.New(vtec.Options{
-        SyncInternal: 1000,
+        SyncInternal: 10000,
         Storage: &storage.FileStore{
             FileName: "keyvalue-store.json",
         },
     })
 
-    routes.AddRoutes(g,v)
+    routes.AddRoutes(api,v)
 
-    g.HealthCheck("/health")
-    g.Listen("80")
+    api.HealthCheck("/health")
+    api.Listen("80")
 }

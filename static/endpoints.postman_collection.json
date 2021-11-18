@@ -1,0 +1,54 @@
+{
+	"info": {
+		"_postman_id": "1868c9f6-1318-4f6c-b85f-28ff51b44c54",
+		"name": "VTEC END POINTS",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GET | http://localhost/api/values/test",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:5005/api/values/test"
+			},
+			"response": []
+		},
+		{
+			"name": "POST | http://localhost:5005/api/values/test",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"Key\": \"test\",\n  \"Value\":\"value\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:5005/api/values"
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE | http://localhost:5005/api/values/test",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:5005/api/values/test"
+			},
+			"response": []
+		}
+	]
+}

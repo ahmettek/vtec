@@ -50,6 +50,15 @@ func (s *Vtec) Set(key string, value string){
 	defer s.mu.Unlock()
 }
 
+func (s *Vtec) Flush(){
+	s.mu.Lock()
+
+	GlobalStore = make(map[string]string)
+	Sync(s.opt.Storage)
+
+	defer s.mu.Unlock()
+}
+
 func AutoSync(o *Options) {
 
 	ticker := time.NewTicker(time.Duration(o.SyncInternal) * time.Millisecond)
