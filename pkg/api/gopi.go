@@ -3,6 +3,7 @@ package gopi
 import (
 	"encoding/json"
 	"github.com/ahmettek/vtec/pkg/logger"
+	"log"
 	"net/http"
 	"strings"
 )
@@ -41,10 +42,10 @@ func New() *Gopi {
 	}
 }
 
-func (g *Gopi) Listen(port string) error{
+func (g *Gopi) Listen(port string) {
 	g.mux.Handle("/", &basicApiHandler{g})
-	err :=http.ListenAndServe(":"+port, g.mux)
-	return err
+	log.Println("Server is ready to handle requests at", port)
+	log.Fatal(http.ListenAndServe(":"+port, g.mux))
 }
 
 func (e *Gopi) GET(path string, handler func(c *GopiContext)) {

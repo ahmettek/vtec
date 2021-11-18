@@ -16,7 +16,7 @@ $ go get -u github.com/ahmettek/vtec
 ### App Usage
 - **Locally**:
 ```sh
-go run main.go
+go run cmd/api/main.go  
 ```
 - **Docker**:
 ```sh
