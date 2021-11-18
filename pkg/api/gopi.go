@@ -56,10 +56,6 @@ func (e *Gopi) DELETE(path string, handler func(c *GopiContext)) {
 	e.add(http.MethodDelete, path, handler)
 }
 
-func (e *Gopi) DELETE2(path string, handler func(c *GopiContext)) {
-	e.add(http.MethodDelete, path, handler)
-}
-
 func (e *Gopi) HealthCheck(path string) {
 	e.add(http.MethodDelete, path, func(c *GopiContext) {
 		c.Res.WriteHeader(http.StatusOK)
@@ -105,13 +101,13 @@ func (h *basicApiHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	h.Handle(context)
 }
 
-func (h *basicApiHandler)  Handle(gc*GopiContext)  {
+func (h *basicApiHandler)  Handle(c*GopiContext)  {
 	for i := range h.api.routes {
 
-		reqPath := parsePath(gc.Req.URL.Path)
+		reqPath := parsePath(c.Req.URL.Path)
 		curPath := h.api.routes[i].Path
 
-		if h.api.routes[i].Method == gc.Req.Method && len(reqPath.splitPath) == len(curPath.splitPath) {
+		if h.api.routes[i].Method == c.Req.Method && len(reqPath.splitPath) == len(curPath.splitPath) {
 
 			for j := range reqPath.splitPath {
 				if !strings.HasPrefix(curPath.splitPath[j], ":") && reqPath.splitPath[j] != curPath.splitPath[j] {
@@ -119,9 +115,9 @@ func (h *basicApiHandler)  Handle(gc*GopiContext)  {
 				}
 			}
 
-			gc.Param = BindParams(reqPath,curPath)
+			c.Param = BindParams(reqPath,curPath)
 
-			h.api.routes[i].Handler(gc)
+			h.api.routes[i].Handler(c)
 
 			break
 		}

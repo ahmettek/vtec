@@ -20,8 +20,8 @@ go run main.go
 ```
 - **Docker**:
 ```sh
-docker build --tag vtec .
-docker run -p 8081:8081 vtec
+docker build --tag vtec .   
+docker run -p 5005:80 vtec
 ```
 ### Package Usage
 #### Vtec Key-Value Store
