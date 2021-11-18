@@ -43,7 +43,7 @@ Create a store, add key and play with it.
 
 ```go
 v := vtec.New(vtec.Options{
-    SyncInternal: 1000,
+    SyncInternal: 10000, //ms
     Storage: &storage.FileStore{
         FileName: "keyvalue-store.json",
     },
