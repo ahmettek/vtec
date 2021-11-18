@@ -35,7 +35,7 @@ docker run -p 5005:80 vtec
 
 OR
 
-Postman Collection: https://github.com/ahmettek/vtec/static/endpoints.postman_collection.json
+Postman Collection: https://raw.githubusercontent.com/ahmettek/vtec/main/static/endpoints.postman_collection.json
 ```
 ### Package Usage
 #### Vtec Key-Value Store
